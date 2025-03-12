@@ -14,6 +14,20 @@ class TagController extends Controller {
         $this->tagService = $tagService;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/tags",
+     *     summary="Get all tags",
+     *     @OA\Response(
+     *         response=200,
+     *         description="A list of tags",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/TagResource")
+     *         )
+     *     )
+     * )
+     */
     public function index() {
         try {
             $tags = $this->tagService->getAllTags();
@@ -24,6 +38,21 @@ class TagController extends Controller {
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/tags",
+     *     summary="Create a new tag",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/TagRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Tag created successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/TagResource")
+     *     )
+     * )
+     */
     public function store(Request $request) {
         try {
             $tag = $this->tagService->createTag($request->all());
@@ -34,6 +63,23 @@ class TagController extends Controller {
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/tags/{id}",
+     *     summary="Get a tag by ID",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="A single tag",
+     *         @OA\JsonContent(ref="#/components/schemas/TagResource")
+     *     )
+     * )
+     */
     public function show($id) {
         try {
             $tag = $this->tagService->getTag($id);
@@ -44,6 +90,27 @@ class TagController extends Controller {
         }
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/tags/{id}",
+     *     summary="Update a tag",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/TagRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Tag updated successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/TagResource")
+     *     )
+     * )
+     */
     public function update(Request $request, $id) {
         try {
             $tag = $this->tagService->updateTag($id, $request->all());
@@ -54,6 +121,22 @@ class TagController extends Controller {
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/tags/{id}",
+     *     summary="Delete a tag",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Tag deleted successfully"
+     *     )
+     * )
+     */
     public function destroy($id) {
         try {
             $this->tagService->deleteTag($id);

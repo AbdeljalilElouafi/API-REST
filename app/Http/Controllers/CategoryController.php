@@ -6,7 +6,14 @@ use App\Services\CategoryService;
 use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
 use Exception;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Tag(
+ *     name="Categories",
+ *     description="Operations related to categories"
+ * )
+ */
 class CategoryController extends Controller {
     protected $categoryService;
 
@@ -18,6 +25,7 @@ class CategoryController extends Controller {
      * @OA\Get(
      *     path="/api/categories",
      *     summary="Get all categories",
+     *     tags={"Categories"},
      *     @OA\Response(
      *         response=200,
      *         description="A list of categories",
@@ -25,6 +33,10 @@ class CategoryController extends Controller {
      *             type="array",
      *             @OA\Items(ref="#/components/schemas/CategoryResource")
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
      *     )
      * )
      */
@@ -42,6 +54,7 @@ class CategoryController extends Controller {
      * @OA\Post(
      *     path="/api/categories",
      *     summary="Create a new category",
+     *     tags={"Categories"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(ref="#/components/schemas/CategoryRequest")
@@ -50,6 +63,10 @@ class CategoryController extends Controller {
      *         response=201,
      *         description="Category created successfully",
      *         @OA\JsonContent(ref="#/components/schemas/CategoryResource")
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
      *     )
      * )
      */
@@ -67,6 +84,7 @@ class CategoryController extends Controller {
      * @OA\Get(
      *     path="/api/categories/{id}",
      *     summary="Get a category by ID",
+     *     tags={"Categories"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -77,6 +95,14 @@ class CategoryController extends Controller {
      *         response=200,
      *         description="A single category",
      *         @OA\JsonContent(ref="#/components/schemas/CategoryResource")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Category not found"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
      *     )
      * )
      */
@@ -94,6 +120,7 @@ class CategoryController extends Controller {
      * @OA\Put(
      *     path="/api/categories/{id}",
      *     summary="Update a category",
+     *     tags={"Categories"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -108,6 +135,10 @@ class CategoryController extends Controller {
      *         response=200,
      *         description="Category updated successfully",
      *         @OA\JsonContent(ref="#/components/schemas/CategoryResource")
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
      *     )
      * )
      */
@@ -125,6 +156,7 @@ class CategoryController extends Controller {
      * @OA\Delete(
      *     path="/api/categories/{id}",
      *     summary="Delete a category",
+     *     tags={"Categories"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -134,6 +166,10 @@ class CategoryController extends Controller {
      *     @OA\Response(
      *         response=204,
      *         description="Category deleted successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
      *     )
      * )
      */
@@ -151,6 +187,7 @@ class CategoryController extends Controller {
      * @OA\Get(
      *     path="/api/categories/{parentId}/subcategories",
      *     summary="Get subcategories for a parent category",
+     *     tags={"Categories"},
      *     @OA\Parameter(
      *         name="parentId",
      *         in="path",
@@ -164,6 +201,10 @@ class CategoryController extends Controller {
      *             type="array",
      *             @OA\Items(ref="#/components/schemas/CategoryResource")
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
      *     )
      * )
      */
