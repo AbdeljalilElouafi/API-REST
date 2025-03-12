@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Services\CategoryService;
-use App\Http\Resources\CatgoryResource;
+use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
+use Exception;
 
 class CategoryController extends Controller {
     protected $categoryService;
@@ -21,11 +23,7 @@ class CategoryController extends Controller {
      *         description="A list of categories",
      *         @OA\JsonContent(
      *             type="array",
-     *             @OA\Items(
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="name", type="string")
-     *             )
+     *             @OA\Items(ref="#/components/schemas/CategoryResource")
      *         )
      *     )
      * )
@@ -33,11 +31,10 @@ class CategoryController extends Controller {
     public function index() {
         try {
             $categories = $this->categoryService->getAllCategories();
-            \Log::info("Categories: " . $categories);
-            return response()->json(['categories'=> CatgoryResource::collection($categories)]);
-        } catch(Exception $e) {
-            \Log::error("cannot get categories: " . $e->getMessage());
-            return response()->json(["success" => false]);
+            return response()->json(['categories' => CategoryResource::collection($categories)]);
+        } catch (Exception $e) {
+            \Log::error("Cannot get categories: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Failed to retrieve categories"], 500);
         }
     }
 
@@ -47,24 +44,23 @@ class CategoryController extends Controller {
      *     summary="Create a new category",
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="name", type="string")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/CategoryRequest")
      *     ),
      *     @OA\Response(
      *         response=201,
      *         description="Category created successfully",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="id", type="integer"),
-     *             @OA\Property(property="name", type="string")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/CategoryResource")
      *     )
      * )
      */
     public function store(Request $request) {
-        return $this->categoryService->createCategory($request->all());
+        try {
+            $category = $this->categoryService->createCategory($request->all());
+            return response()->json(['category' => new CategoryResource($category)], 201);
+        } catch (Exception $e) {
+            \Log::error("Cannot create category: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Failed to create category"], 500);
+        }
     }
 
     /**
@@ -80,16 +76,18 @@ class CategoryController extends Controller {
      *     @OA\Response(
      *         response=200,
      *         description="A single category",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="id", type="integer"),
-     *             @OA\Property(property="name", type="string")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/CategoryResource")
      *     )
      * )
      */
     public function show($id) {
-        return $this->categoryService->getCategory($id);
+        try {
+            $category = $this->categoryService->getCategory($id);
+            return response()->json(['category' => new CategoryResource($category)]);
+        } catch (Exception $e) {
+            \Log::error("Cannot get category: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Category not found"], 404);
+        }
     }
 
     /**
@@ -104,24 +102,23 @@ class CategoryController extends Controller {
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="name", type="string")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/CategoryRequest")
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Category updated successfully",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="id", type="integer"),
-     *             @OA\Property(property="name", type="string")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/CategoryResource")
      *     )
      * )
      */
     public function update(Request $request, $id) {
-        return $this->categoryService->updateCategory($id, $request->all());
+        try {
+            $category = $this->categoryService->updateCategory($id, $request->all());
+            return response()->json(['category' => new CategoryResource($category)]);
+        } catch (Exception $e) {
+            \Log::error("Cannot update category: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Failed to update category"], 500);
+        }
     }
 
     /**
@@ -141,7 +138,13 @@ class CategoryController extends Controller {
      * )
      */
     public function destroy($id) {
-        return $this->categoryService->deleteCategory($id);
+        try {
+            $this->categoryService->deleteCategory($id);
+            return response()->noContent();
+        } catch (Exception $e) {
+            \Log::error("Cannot delete category: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Failed to delete category"], 500);
+        }
     }
 
     /**
@@ -159,17 +162,18 @@ class CategoryController extends Controller {
      *         description="List of subcategories",
      *         @OA\JsonContent(
      *             type="array",
-     *             @OA\Items(
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="name", type="string")
-     *             )
+     *             @OA\Items(ref="#/components/schemas/CategoryResource")
      *         )
      *     )
      * )
      */
-
     public function getSubcategories($parentId) {
-        return $this->categoryService->getSubcategories($parentId);
+        try {
+            $subcategories = $this->categoryService->getSubcategories($parentId);
+            return response()->json(['subcategories' => CategoryResource::collection($subcategories)]);
+        } catch (Exception $e) {
+            \Log::error("Cannot get subcategories: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Failed to retrieve subcategories"], 500);
+        }
     }
 }

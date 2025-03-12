@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TagController;
 
 
 
@@ -18,6 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 Route::apiResource('courses', CourseController::class);
+Route::apiResource('tags', TagController::class);
 Route::middleware('auth:sanctum')->group(function () {
 });
 

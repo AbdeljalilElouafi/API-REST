@@ -4,7 +4,11 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Repositories\Interfaces\CourseRepositoryInterface;
+use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\CategoryRepository;
+use App\Repositories\CourseRepository;
+use App\Repositories\TagRepository;
 use OpenAPI\Annotations as OA;
 
 /**
@@ -22,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(CourseRepositoryInterface::class, CourseRepository::class);
+        $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
     }
 
     /**

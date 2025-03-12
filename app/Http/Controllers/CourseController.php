@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Services\CourseService;
+use App\Http\Resources\CourseResource;
 use Illuminate\Http\Request;
+use Exception;
 
 class CourseController extends Controller {
     protected $courseService;
@@ -13,22 +15,52 @@ class CourseController extends Controller {
     }
 
     public function index() {
-        return $this->courseService->getAllCourses();
+        try {
+            $courses = $this->courseService->getAllCourses();
+            return response()->json(['courses' => CourseResource::collection($courses)]);
+        } catch (Exception $e) {
+            \Log::error("Cannot get courses: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Failed to retrieve courses"], 500);
+        }
     }
 
     public function store(Request $request) {
-        return $this->courseService->createCourse($request->all());
+        try {
+            $course = $this->courseService->createCourse($request->all());
+            return response()->json(['course' => new CourseResource($course)], 201);
+        } catch (Exception $e) {
+            \Log::error("Cannot create course: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Failed to create course"], 500);
+        }
     }
 
     public function show($id) {
-        return $this->courseService->getCourse($id);
+        try {
+            $course = $this->courseService->getCourse($id);
+            return response()->json(['course' => new CourseResource($course)]);
+        } catch (Exception $e) {
+            \Log::error("Cannot get course: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Course not found"], 404);
+        }
     }
 
     public function update(Request $request, $id) {
-        return $this->courseService->updateCourse($id, $request->all());
+        try {
+            $course = $this->courseService->updateCourse($id, $request->all());
+            return response()->json(['course' => new CourseResource($course)]);
+        } catch (Exception $e) {
+            \Log::error("Cannot update course: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Failed to update course"], 500);
+        }
     }
 
     public function destroy($id) {
-        return $this->courseService->deleteCourse($id);
+        try {
+            $this->courseService->deleteCourse($id);
+            return response()->noContent();
+        } catch (Exception $e) {
+            \Log::error("Cannot delete course: " . $e->getMessage());
+            return response()->json(["success" => false, "message" => "Failed to delete course"], 500);
+        }
     }
 }
