@@ -17,15 +17,10 @@ class TagController extends Controller {
     /**
      * @OA\Get(
      *     path="/api/tags",
-     *     summary="Get all tags",
-     *     @OA\Response(
-     *         response=200,
-     *         description="A list of tags",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/TagResource")
-     *         )
-     *     )
+     *     summary="Get a list of tags",
+     *     tags={"Tag"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function index() {
@@ -41,16 +36,17 @@ class TagController extends Controller {
     /**
      * @OA\Post(
      *     path="/api/tags",
-     *     summary="Create a new tag",
+     *     summary="Store a new Tag",
+     *     tags={"Tag"},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/TagRequest")
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Technology")
+     *         )
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Tag created successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/TagResource")
-     *     )
+     *     @OA\Response(response=200, description="Tag created"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function store(Request $request) {
@@ -73,11 +69,15 @@ class TagController extends Controller {
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="A single tag",
-     *         @OA\JsonContent(ref="#/components/schemas/TagResource")
-     *     )
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Science")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Tag updated"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function show($id) {
@@ -100,15 +100,15 @@ class TagController extends Controller {
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\RequestBody(
+     *      @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/TagRequest")
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Science")
+     *         )
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Tag updated successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/TagResource")
-     *     )
+     *     @OA\Response(response=200, description="Tag updated"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function update(Request $request, $id) {

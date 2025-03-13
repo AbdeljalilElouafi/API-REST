@@ -17,15 +17,10 @@ class CourseController extends Controller {
     /**
      * @OA\Get(
      *     path="/api/courses",
-     *     summary="Get all courses",
-     *     @OA\Response(
-     *         response=200,
-     *         description="A list of courses",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/CourseResource")
-     *         )
-     *     )
+     *     summary="Get a list of courses",
+     *     tags={"Course"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function index() {
@@ -41,16 +36,17 @@ class CourseController extends Controller {
     /**
      * @OA\Post(
      *     path="/api/courses",
-     *     summary="Create a new course",
+     *     summary="Store a new course",
+     *     tags={"Course"},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/CourseRequest")
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Technology")
+     *         )
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Course created successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/CourseResource")
-     *     )
+     *     @OA\Response(response=200, description="Course created"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function store(Request $request) {
@@ -73,11 +69,15 @@ class CourseController extends Controller {
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="A single course",
-     *         @OA\JsonContent(ref="#/components/schemas/CourseResource")
-     *     )
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Science")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Course updated"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function show($id) {
@@ -100,15 +100,15 @@ class CourseController extends Controller {
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\RequestBody(
+     *      @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/CourseRequest")
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Science")
+     *         )
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Course updated successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/CourseResource")
-     *     )
+     *     @OA\Response(response=200, description="Course updated"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function update(Request $request, $id) {

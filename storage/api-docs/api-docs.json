@@ -7,43 +7,38 @@
     "paths": {
         "/api/categories": {
             "get": {
-                "summary": "Get all categories",
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Get a list of categories",
                 "operationId": "3f5817a34833d0a1f4af4548dd3aeaba",
                 "responses": {
                     "200": {
-                        "description": "A list of categories",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer"
-                                            },
-                                            "name": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                }
-                            }
-                        }
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid request"
                     }
                 }
             },
             "post": {
-                "summary": "Create a new category",
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Store a new category",
                 "operationId": "71fcad552bb0eaba9fb191fd8d8dcab0",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "name"
+                                ],
                                 "properties": {
                                     "name": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Technology"
                                     }
                                 },
                                 "type": "object"
@@ -52,69 +47,53 @@
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Category created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer"
-                                        },
-                                        "name": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                    "200": {
+                        "description": "Category created"
+                    },
+                    "400": {
+                        "description": "Invalid request"
                     }
                 }
             }
         },
         "/api/categories/{id}": {
             "get": {
-                "summary": "Get a category by ID",
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Get category details",
                 "operationId": "c68e76d323c008827a9e47398b1583de",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "Category ID",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "A single category",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer"
-                                        },
-                                        "name": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Category not found"
                     }
                 }
             },
             "put": {
+                "tags": [
+                    "Category"
+                ],
                 "summary": "Update a category",
                 "operationId": "0e686b2748211cc688333ed705dc111f",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "Category ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -126,9 +105,13 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "name"
+                                ],
                                 "properties": {
                                     "name": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Science"
                                     }
                                 },
                                 "type": "object"
@@ -138,26 +121,17 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Category updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer"
-                                        },
-                                        "name": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Category updated"
+                    },
+                    "400": {
+                        "description": "Invalid request"
                     }
                 }
             },
             "delete": {
+                "tags": [
+                    "Categories"
+                ],
                 "summary": "Delete a category",
                 "operationId": "4c12e22a7f8c617bd83bfa1fdc05428d",
                 "parameters": [
@@ -173,12 +147,18 @@
                 "responses": {
                     "204": {
                         "description": "Category deleted successfully"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
         },
         "/api/categories/{parentId}/subcategories": {
             "get": {
+                "tags": [
+                    "Categories"
+                ],
                 "summary": "Get subcategories for a parent category",
                 "operationId": "a80f3eaaafe812b15b6efee10d84ffe5",
                 "parameters": [
@@ -191,30 +171,410 @@
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "List of subcategories",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer"
-                                            },
-                                            "name": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Science"
                                     }
-                                }
+                                },
+                                "type": "object"
                             }
                         }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category updated"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/api/courses": {
+            "get": {
+                "tags": [
+                    "Course"
+                ],
+                "summary": "Get a list of courses",
+                "operationId": "02eeda67042dba2d22a517f26fb8eaf1",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Course"
+                ],
+                "summary": "Store a new course",
+                "operationId": "a4d6b7e7be59571034428ffbb86aaf0a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Technology"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Course created"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/api/courses/{id}": {
+            "get": {
+                "summary": "Get a course by ID",
+                "operationId": "f170bd35e3106c9d9bf5807499c80b68",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Science"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Course updated"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a course",
+                "operationId": "4d00e54a4b57b3259c40894ad2d0c76b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Science"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Course updated"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a course",
+                "operationId": "3a2888333ed2868b6102094f5348520e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Course deleted successfully"
+                    }
+                }
+            }
+        },
+        "/api/tags": {
+            "get": {
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Get a list of tags",
+                "operationId": "4d0f4baf9e6fa992c0d85fbf140ebf17",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Store a new Tag",
+                "operationId": "a0a246f29dcb119a2189fd230fc10028",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Technology"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tag created"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/api/tags/{id}": {
+            "get": {
+                "summary": "Get a tag by ID",
+                "operationId": "7ee77c2c6103e7603a7b63367efc71a8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Science"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tag updated"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a tag",
+                "operationId": "91c5f77096ddaaf2bed585f48d054044",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Science"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tag updated"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a tag",
+                "operationId": "6f092682e8bbdea016bb928c862fc3e4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Tag deleted successfully"
                     }
                 }
             }
         }
-    }
+    },
+    "components": {
+        "schemas": {
+            "CategoryRequest": {
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Category Name"
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "CategoryResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                }
+            },
+            "CategoryRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Category",
+            "description": "Category"
+        },
+        {
+            "name": "Categories",
+            "description": "Categories"
+        },
+        {
+            "name": "Course",
+            "description": "Course"
+        },
+        {
+            "name": "Tag",
+            "description": "Tag"
+        }
+    ]
 }

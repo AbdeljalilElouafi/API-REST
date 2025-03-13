@@ -9,9 +9,23 @@ use Exception;
 use OpenApi\Annotations as OA;
 
 /**
- * @OA\Tag(
- *     name="Categories",
- *     description="Operations related to categories"
+ * @OA\Schema(
+ *     schema="CategoryResource",
+ *     type="object",
+ *     required={"id", "name"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="Category Name"),
+ *     @OA\Property(property="parent_id", type="integer", nullable=true, example=null)
+ * )
+ */
+
+/**
+ * @OA\Schema(
+ *     schema="CategoryRequest",
+ *     type="object",
+ *     required={"name"},
+ *     @OA\Property(property="name", type="string", example="Category Name"),
+ *     @OA\Property(property="parent_id", type="integer", nullable=true, example=null)
  * )
  */
 class CategoryController extends Controller {
@@ -21,23 +35,13 @@ class CategoryController extends Controller {
         $this->categoryService = $categoryService;
     }
 
-    /**
+     /**
      * @OA\Get(
      *     path="/api/categories",
-     *     summary="Get all categories",
-     *     tags={"Categories"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="A list of categories",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/CategoryResource")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal server error"
-     *     )
+     *     summary="Get a list of categories",
+     *     tags={"Category"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function index() {
@@ -53,21 +57,17 @@ class CategoryController extends Controller {
     /**
      * @OA\Post(
      *     path="/api/categories",
-     *     summary="Create a new category",
-     *     tags={"Categories"},
+     *     summary="Store a new category",
+     *     tags={"Category"},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/CategoryRequest")
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Technology")
+     *         )
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Category created successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/CategoryResource")
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal server error"
-     *     )
+     *     @OA\Response(response=200, description="Category created"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function store(Request $request) {
@@ -80,30 +80,20 @@ class CategoryController extends Controller {
         }
     }
 
-    /**
+     /**
      * @OA\Get(
      *     path="/api/categories/{id}",
-     *     summary="Get a category by ID",
-     *     tags={"Categories"},
+     *     summary="Get category details",
+     *     tags={"Category"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
-     *         @OA\Schema(type="integer")
+     *         description="Category ID",
+     *         @OA\Schema(type="string")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="A single category",
-     *         @OA\JsonContent(ref="#/components/schemas/CategoryResource")
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Category not found"
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal server error"
-     *     )
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=404, description="Category not found")
      * )
      */
     public function show($id) {
@@ -120,26 +110,23 @@ class CategoryController extends Controller {
      * @OA\Put(
      *     path="/api/categories/{id}",
      *     summary="Update a category",
-     *     tags={"Categories"},
+     *     tags={"Category"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
+     *         description="Category ID",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/CategoryRequest")
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Science")
+     *         )
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Category updated successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/CategoryResource")
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal server error"
-     *     )
+     *     @OA\Response(response=200, description="Category updated"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function update(Request $request, $id) {
@@ -194,18 +181,15 @@ class CategoryController extends Controller {
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="List of subcategories",
+     *     @OA\RequestBody(
+     *         required=true,
      *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/CategoryResource")
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Science")
      *         )
      *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal server error"
-     *     )
+     *     @OA\Response(response=200, description="Category updated"),
+     *     @OA\Response(response=400, description="Invalid request")
      * )
      */
     public function getSubcategories($parentId) {
