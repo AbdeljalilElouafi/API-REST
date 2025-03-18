@@ -78,6 +78,15 @@ return [
             'group_options' => [],
         ],
 
+        'definitions' => [
+            [
+                'type' => 'oauth2', // Required for OAuth2 support
+                'authorizationUrl' => '/oauth/authorize', // Your OAuth2 authorization URL
+                'tokenUrl' => '/oauth/token', // Your OAuth2 token URL
+                'flow' => 'password', // OAuth2 flow type (e.g., password, implicit, authorizationCode)
+            ],
+        ],
+
         'paths' => [
             /*
              * Absolute path to location where parsed annotations will be stored

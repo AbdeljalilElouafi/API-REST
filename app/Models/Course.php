@@ -22,6 +22,11 @@ class Course extends Model
         return $this->belongsTo(User::class, 'mentor_id');
     }
 
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
     public function videos() {
         return $this->hasMany(Video::class);
     }

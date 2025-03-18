@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Role;
+use App\Models\Permission;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,21 +16,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        $randArray = [null, 1,2,3,4,5,7,8,9,11,12,15,16,20];
-
-        Category::factory(25)->create()->each(function ($category) use ($randArray) {
-
-            $category->parent_id = $randArray[rand(0, count($randArray)-1)];
-            $category->save();
-        });
-        
-        // User::factory(10)->create();
-
-
         $this->call([
-            TagSeeder::class,
-            CourseSeeder::class,
+            RoleSeeder::class,
+            PermissionSeeder::class,
+        ]);
+
+       
+        $admin = Role::where('name', 'admin')->first();
+        $mentor = Role::where('name', 'mentor')->first();
+        $student = Role::where('name', 'student')->first();
+
+        $admin->givePermissionTo([
+            'create-courses',
+            'edit-courses',
+            'delete-courses',
+            'view-courses',
+            'view-statistics',
+        ]);
+
+        $mentor->givePermissionTo([
+            'create-courses',
+            'edit-courses',
+            'delete-courses',
+            'view-courses',
+            'update-profile',
+        ]);
+
+        $student->givePermissionTo([
+            'view-courses',
+            'enroll-in-courses',
+            'update-profile',
         ]);
     }
 }

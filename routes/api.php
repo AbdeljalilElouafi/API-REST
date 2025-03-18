@@ -6,6 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\EnrollmentController;
 
 
 
@@ -17,6 +20,44 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
+Route::middleware('auth:sanctum')->group(function () {
+   
+    Route::get('/{id}/courses', [MentorController::class, 'getCourses']);
+    Route::get('/{id}/students', [MentorController::class, 'getStudents']);
+    Route::get('/{id}/performance', [MentorController::class, 'getPerformance']);
+    
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    
+    Route::get('/{id}/courses', [StudentController::class, 'getCourses']);
+    Route::get('/{id}/progress', [StudentController::class, 'getProgress']);
+    Route::get('/{id}/badges', [StudentController::class, 'getBadges']);
+    
+});
+
+
+Route::apiResource('roles', RoleController::class);
+Route::middleware('auth:sanctum')->group(function () {
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/statistics', [StatisticsController::class, 'index'])->middleware('role:admin');
+});
+
+Route::apiResource('permissions', PermissionController::class);
+Route::middleware('auth:sanctum')->group(function () {
+});
+
+Route::apiResource('enrollments', EnrollmentController::class);
+Route::middleware('auth:sanctum')->group(function () {
+});
 
 Route::apiResource('courses', CourseController::class);
 Route::apiResource('tags', TagController::class);
