@@ -13,13 +13,13 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'create-courses']);
-        Permission::create(['name' => 'edit-courses']);
-        Permission::create(['name' => 'delete-courses']);
-        Permission::create(['name' => 'view-courses']);
-        Permission::create(['name' => 'enroll-in-courses']);
-        Permission::create(['name' => 'update-profile']);
-        Permission::create(['name' => 'view-statistics']);
+        Permission::create(['name' => 'create-courses', 'guard_name' => 'web']);
+        Permission::create(['name' => 'edit-courses', 'guard_name' => 'web']);
+        Permission::create(['name' => 'delete-courses', 'guard_name' => 'web']);
+        Permission::create(['name' => 'view-courses', 'guard_name' => 'web']);
+        Permission::create(['name' => 'enroll-in-courses', 'guard_name' => 'web']);
+        Permission::create(['name' => 'update-profile', 'guard_name' => 'web']);
+        Permission::create(['name' => 'view-statistics', 'guard_name' => 'web']);
 
     }
 }

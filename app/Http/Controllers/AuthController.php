@@ -48,4 +48,20 @@ class AuthController extends Controller {
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
+
+    public function refresh(Request $request)
+    {
+        $user = $request->user();
+
+        
+        $user->currentAccessToken()->delete();
+
+        
+        $newToken = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'success' => true,
+            'token' => $newToken,
+        ]);
+    }
 }

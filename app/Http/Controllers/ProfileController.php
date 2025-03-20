@@ -53,16 +53,27 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
-        $userId = Auth::id();
-
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $userId,
-            'bio' => 'nullable|string',
-            'avatar_url' => 'nullable|url',
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id,
+            'profile_image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
-        $profile = $this->profileService->updateProfile($userId, $request->all());
-        return response()->json(['message' => 'Profile updated successfully', 'profile' => $profile]);
+    
+        $user = User::findOrFail($id);
+    
+        if ($request->hasFile('profile_image')) {
+            
+            if ($user->profile_image) {
+                Storage::delete($user->profile_image);
+            }
+    
+           
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $user->profile_image = $path;
+        }
+    
+        $user->update($request->except('profile_image'));
+    
+        return response()->json(['user' => $user], 200);
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\ProfileController;
 
 
 
@@ -67,6 +68,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/refresh', [AuthController::class, 'refresh']);
+
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::get('/user', function (Request $request) {
