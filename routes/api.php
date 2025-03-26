@@ -10,9 +10,34 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BadgeController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SearchController;
 
 
 
+
+
+Route::get('/badges', [BadgeController::class, 'index']);
+Route::get('/students/{user}/badges', [BadgeController::class, 'getUserBadges']);
+Route::post('/badges/check', [BadgeController::class, 'checkBadges'])->middleware('auth:sanctum');
+
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/badges', [BadgeController::class, 'store']);
+    Route::put('/badges/{badge}', [BadgeController::class, 'update']);
+    Route::delete('/badges/{badge}', [BadgeController::class, 'destroy']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/payments/checkout/{course}', [PaymentController::class, 'checkout']);
+    Route::get('/payments/status/{id}', [PaymentController::class, 'paymentStatus']);
+    Route::get('/payments/history', [PaymentController::class, 'paymentHistory']);
+});
+
+
+Route::post('/stripe/webhook', [PaymentController::class, 'handleWebhook']);
 
 
 Route::apiResource('categories', CategoryController::class);
@@ -64,6 +89,10 @@ Route::apiResource('courses', CourseController::class);
 Route::apiResource('tags', TagController::class);
 Route::middleware('auth:sanctum')->group(function () {
 });
+
+Route::get('/courses', [SearchController::class, 'searchCourses']);
+Route::get('/mentors', [SearchController::class, 'searchMentors']);
+Route::get('/students', [SearchController::class, 'filterStudentsByBadges']);
 
 
 Route::post('/login', [AuthController::class, 'login']);

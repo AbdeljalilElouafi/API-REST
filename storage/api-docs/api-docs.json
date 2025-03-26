@@ -5,6 +5,460 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/badges": {
+            "get": {
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Get all badges",
+                "operationId": "008f4b683e773cba1814e20383773fe7",
+                "responses": {
+                    "200": {
+                        "description": "List of badges",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Course Master"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Completed 5 courses"
+                                            },
+                                            "image_url": {
+                                                "type": "string",
+                                                "example": "https://example.com/badge.png"
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "course_completion",
+                                                    "mentor",
+                                                    "activity"
+                                                ]
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Create a new badge",
+                "operationId": "d3b796fcfc74fc2c8822823d5d01915b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "image_url",
+                                    "type"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Course Master"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Completed 5 courses"
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "https://example.com/badge.png"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "course_completion",
+                                            "mentor",
+                                            "activity"
+                                        ],
+                                        "example": "course_completion"
+                                    },
+                                    "conditions": {
+                                        "type": "object",
+                                        "example": {
+                                            "courses_completed": 5
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Badge created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Course Master"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Completed 5 courses"
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://example.com/badge.png"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "example": "course_completion"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The name field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/badges/user/{userId}": {
+            "get": {
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Get user's badges",
+                "operationId": "f85e71f398ce5495c1a212de68d43561",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of user's badges",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Course Master"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Completed 5 courses"
+                                            },
+                                            "image_url": {
+                                                "type": "string",
+                                                "example": "https://example.com/badge.png"
+                                            },
+                                            "earned_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/badges/{id}": {
+            "put": {
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Update a badge",
+                "operationId": "381772c5e0e758ebc85c3a78e89c50d4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Badge ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Updated Badge Name"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Updated description"
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "https://example.com/new-badge.png"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "course_completion",
+                                            "mentor",
+                                            "activity"
+                                        ]
+                                    },
+                                    "conditions": {
+                                        "type": "object",
+                                        "example": {
+                                            "courses_completed": 10
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Badge updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Updated Badge Name"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Updated description"
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://example.com/new-badge.png"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "example": "course_completion"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Badge not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Badge not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Delete a badge",
+                "operationId": "aa01f8638c05459b9aecdf25867d3d9c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Badge ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Badge deleted successfully"
+                    },
+                    "404": {
+                        "description": "Badge not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Badge not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/badges/check": {
+            "post": {
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Check and award badges for user",
+                "operationId": "98e7b8b5c4ae10cba9150f95c433cdcb",
+                "responses": {
+                    "200": {
+                        "description": "List of awarded badges",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Course Master"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Completed 5 courses"
+                                            },
+                                            "earned_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/categories": {
             "get": {
                 "tags": [
@@ -415,6 +869,55 @@
                 }
             }
         },
+        "/api/enrollments/{courseId}/enroll": {
+            "post": {
+                "tags": [
+                    "Enrollment"
+                ],
+                "summary": "Enroll in a course with payment flow",
+                "operationId": "79eb4b3236f5242339e517415d594dc4",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Enrollment successful or payment required",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "enrollment": {
+                                            "type": "boolean"
+                                        },
+                                        "payment_required": {
+                                            "type": "boolean"
+                                        },
+                                        "payment_url": {
+                                            "type": "string",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    }
+                }
+            }
+        },
         "/api/enrollments/{id}": {
             "get": {
                 "summary": "Get an enrollment by ID",
@@ -505,6 +1008,430 @@
                 "responses": {
                     "204": {
                         "description": "Enrollment deleted successfully"
+                    }
+                }
+            }
+        },
+        "/api/V1/mentors/{id}/courses": {
+            "get": {
+                "tags": [
+                    "Mentor"
+                ],
+                "summary": "List courses created by a mentor",
+                "operationId": "6a91aa35d3fab79a41ae61579a414755",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Courses retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Mentor not found"
+                    }
+                }
+            }
+        },
+        "/api/V1/mentors/{id}/students": {
+            "get": {
+                "tags": [
+                    "Mentor"
+                ],
+                "summary": "List students enrolled in a mentor's courses",
+                "operationId": "b6a9d3d471419a587aeedfd5aa428142",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Students retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Mentor not found"
+                    }
+                }
+            }
+        },
+        "/api/V1/mentors/{id}/performance": {
+            "get": {
+                "tags": [
+                    "Mentor"
+                ],
+                "summary": "Get performance statistics of a mentor",
+                "operationId": "e1fd3ef3d113794b0e69af1863db7fff",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Performance statistics retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Mentor not found"
+                    }
+                }
+            }
+        },
+        "/api/payments/checkout/{courseId}": {
+            "post": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Initiate payment checkout",
+                "operationId": "739371daf603de7bcecd75ac5cbc1dec",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "description": "ID of the course to purchase",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "redirect_url"
+                                ],
+                                "properties": {
+                                    "redirect_url": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "https://example.com/return"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Checkout initiated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "payment_url": {
+                                            "type": "string",
+                                            "example": "https://checkout.stripe.com/pay/cs_test_abc123"
+                                        },
+                                        "redirect_url": {
+                                            "type": "string",
+                                            "example": "https://example.com/return"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "redirect_url": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The redirect url field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/success": {
+            "get": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Handle successful payment",
+                "operationId": "31c5ea9e04c34b5ec28b036f267efbed",
+                "parameters": [
+                    {
+                        "name": "session_id",
+                        "in": "query",
+                        "description": "Payment session ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "cs_test_abc123"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Payment confirmed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Payment successful"
+                                        },
+                                        "session_id": {
+                                            "type": "string",
+                                            "example": "cs_test_abc123"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/cancel": {
+            "get": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Handle canceled payment",
+                "operationId": "5a76546f359b5f0c89d049be2e644128",
+                "responses": {
+                    "400": {
+                        "description": "Payment canceled",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Payment canceled"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/payments/status/{id}": {
+            "get": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Get payment status",
+                "operationId": "56616d1002ee853f370c5f217a0d96a8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Payment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "pi_123456789"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Payment status",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "pi_123456789"
+                                        },
+                                        "amount": {
+                                            "type": "number",
+                                            "example": 99.99
+                                        },
+                                        "currency": {
+                                            "type": "string",
+                                            "example": "usd"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "succeeded"
+                                        },
+                                        "paid": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/history": {
+            "get": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Get user's payment history",
+                "operationId": "ad6218126fc338c5148ec1837733400a",
+                "responses": {
+                    "200": {
+                        "description": "Payment history",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "example": "pi_123456789"
+                                            },
+                                            "amount": {
+                                                "type": "number",
+                                                "example": 99.99
+                                            },
+                                            "currency": {
+                                                "type": "string",
+                                                "example": "usd"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "succeeded"
+                                            },
+                                            "course_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/webhook": {
+            "post": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Handle payment webhook",
+                "operationId": "1fe685698baabaf0e324d1560b07cd1a",
+                "requestBody": {
+                    "description": "Webhook payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Webhook processed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid webhook",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid webhook"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -644,6 +1571,73 @@
                 }
             }
         },
+        "/api/profile": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get the authenticated user's profile",
+                "operationId": "ede45b19680d6fb1319013a741a05734",
+                "responses": {
+                    "200": {
+                        "description": "Profile retrieved successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Update the authenticated user's profile",
+                "operationId": "b927bf00923c712a27589c6a510ebbf5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "bio": {
+                                        "type": "string",
+                                        "example": "A passionate mentor/student."
+                                    },
+                                    "avatar_url": {
+                                        "type": "string",
+                                        "example": "https://example.com/avatar.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile updated successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
         "/api/roles": {
             "get": {
                 "tags": [
@@ -775,6 +1769,278 @@
                 "responses": {
                     "204": {
                         "description": "Role deleted successfully"
+                    }
+                }
+            }
+        },
+        "/api/V3/courses": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Search and filter courses",
+                "operationId": "a1565d22944e2f7660801f603bb528b3",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "difficulty",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "description": {
+                                                "type": "string"
+                                            },
+                                            "difficulty_level": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/V3/mentors": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Search mentors",
+                "operationId": "cc2a392e547e3ed4227389481830e699",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "expertise": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/V3/students": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Filter students by badges",
+                "operationId": "011d373b2879e0128ec0ed1a6f80343e",
+                "parameters": [
+                    {
+                        "name": "badges",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "badges": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/statistics": {
+            "get": {
+                "tags": [
+                    "Statistics"
+                ],
+                "summary": "Get platform statistics (Admin only)",
+                "operationId": "1502b3091dc313de47499cddeda4014f",
+                "responses": {
+                    "200": {
+                        "description": "Statistics retrieved successfully"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/V1/students/{id}/courses": {
+            "get": {
+                "tags": [
+                    "Student"
+                ],
+                "summary": "List courses enrolled by a student",
+                "operationId": "9788edb69e0dc47ec0edb30b30a5b382",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Courses retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Student not found"
+                    }
+                }
+            }
+        },
+        "/api/V1/students/{id}/progress": {
+            "get": {
+                "tags": [
+                    "Student"
+                ],
+                "summary": "Track a student's progress in their courses",
+                "operationId": "3d93d2bae1565a61dd26aa623949235e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Progress retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Student not found"
+                    }
+                }
+            }
+        },
+        "/api/V1/students/{id}/badges": {
+            "get": {
+                "tags": [
+                    "Student"
+                ],
+                "summary": "List badges earned by a student",
+                "operationId": "190c54861203420a14bc31d3d2877783",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Badges retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Student not found"
                     }
                 }
             }
@@ -986,6 +2252,10 @@
     },
     "tags": [
         {
+            "name": "Badge",
+            "description": "Badge"
+        },
+        {
             "name": "Category",
             "description": "Category"
         },
@@ -1002,12 +2272,36 @@
             "description": "Enrollment"
         },
         {
+            "name": "Mentor",
+            "description": "Mentor"
+        },
+        {
+            "name": "Payment",
+            "description": "Payment"
+        },
+        {
             "name": "Permission",
             "description": "Permission"
         },
         {
+            "name": "Profile",
+            "description": "Profile"
+        },
+        {
             "name": "Role",
             "description": "Role"
+        },
+        {
+            "name": "Search",
+            "description": "Search"
+        },
+        {
+            "name": "Statistics",
+            "description": "Statistics"
+        },
+        {
+            "name": "Student",
+            "description": "Student"
         },
         {
             "name": "Tag",

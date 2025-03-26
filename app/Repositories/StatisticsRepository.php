@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Repositories\Interfaces\StatisticsRepositoryInterface;
 
 class StatisticsRepository implements StatisticsRepositoryInterface
 {

@@ -13,6 +13,10 @@ use App\Repositories\Interfaces\ProfileRepositoryInterface;
 use App\Repositories\Interfaces\StatisticsRepositoryInterface;
 use App\Repositories\Interfaces\MentorRepositoryInterface;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
+use App\Repositories\Interfaces\BadgeRepositoryInterface;
+use App\Repositories\Interfaces\PaymentRepositoryInterface;
+use App\Repositories\PaymentRepository;
+use App\Repositories\BadgeRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\CourseRepository;
 use App\Repositories\TagRepository;
@@ -48,6 +52,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StatisticsRepositoryInterface::class, StatisticsRepository::class);
         $this->app->bind(MentorRepositoryInterface::class, MentorRepository::class);
         $this->app->bind(StudentRepositoryInterface::class, StudentRepository::class);
+        $this->app->bind(BadgeRepositoryInterface::class, BadgeRepository::class);
+        $this->app->bind(PaymentRepositoryInterface::class, PaymentRepository::class);
     }
 
     /**
